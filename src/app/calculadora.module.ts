@@ -17,10 +17,14 @@ export class Calculadora {
 		if(this.stack_string_display == "Infinity"){
 			this.stack_string_display = '';
 		}
-		if(this.is_simbol(character[1]) && this.is_simbol(this.stack_string_display[this.stack_string_display.length -2])){
+		if(this.already_simbol_in_stack(character)){
 			this.stack_string_display = this.stack_string_display.slice(0, -3);
 		}
 		this.stack_string_display += character;
+	}
+	private already_simbol_in_stack(character: string): boolean{
+		return this.is_simbol(character[1]) && 
+			this.is_simbol(this.stack_string_display[this.stack_string_display.length -2]);
 	}
 	public compute_result():void{
 		let divided_string_display = this.stack_string_display.split(" ");
@@ -34,7 +38,7 @@ export class Calculadora {
 			let operate_two_result: string = this.operate_two(expresion, index_two_next_numbers);
 			expresion.splice(index_two_next_numbers-1, 3, operate_two_result);
 		}
-				return expresion[0];
+		return expresion[0];
 	}
 	private operate_two(expresion: string[], index: number): string{
 		let resultado: number=0;
@@ -68,6 +72,7 @@ export class Calculadora {
 		return !this.is_simbol(number);
 	}
 	private convert_string_prefix(expresion: string[]): string[]{
+		//Notación polaca inversa
 		let stack_resultado: string[] = [];
 		let stack_operadores: string[] = [];
 		let expresion_length = expresion.length;
