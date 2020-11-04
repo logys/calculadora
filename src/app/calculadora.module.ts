@@ -2,6 +2,7 @@ import {Polaca} from './polaca.module'
 import {Simbol} from './simbolo.module'
 export class Calculadora {
 	private stack_string_display: string = '0';
+	private equal_pressed: boolean = false;
 	private static instance: Calculadora;
 	private constructor() { }
 	public static getInstance(): Calculadora {
@@ -14,8 +15,14 @@ export class Calculadora {
 		return this.stack_string_display;
 	}
 	public add_to_string(character: string): void{
-		if(this.stack_string_display == "Infinity" || this.stack_string_display == '0'){
+		if(Simbol.is(character[1])){
+			this.equal_pressed = false;
+		}
+		if(this.stack_string_display == "Infinity" ||
+			this.stack_string_display == '0' ||
+			this.equal_pressed == true){
 			this.stack_string_display = '';
+			this.equal_pressed = false;
 		}
 		if(this.already_simbol_in_stack(character)){
 			this.stack_string_display = this.stack_string_display.slice(0, -3);
@@ -30,6 +37,7 @@ export class Calculadora {
 		let divided_string_display = this.stack_string_display.split(" ");
 		let prefix_string = Polaca.Do(divided_string_display);
 		this.stack_string_display = this.evualuate_math_prefix(prefix_string);
+		this.equal_pressed = true;
 	}
 	private evualuate_math_prefix(expresion: string[]):string{
 		while(expresion.length > 1){
