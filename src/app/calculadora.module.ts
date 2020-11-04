@@ -1,7 +1,7 @@
 import {Polaca} from './polaca.module'
 import {Simbol} from './simbolo.module'
 export class Calculadora {
-	private stack_string_display: string = '';
+	private stack_string_display: string = '0';
 	private static instance: Calculadora;
 	private constructor() { }
 	public static getInstance(): Calculadora {
@@ -14,7 +14,7 @@ export class Calculadora {
 		return this.stack_string_display;
 	}
 	public add_to_string(character: string): void{
-		if(this.stack_string_display == "Infinity"){
+		if(this.stack_string_display == "Infinity" || this.stack_string_display == '0'){
 			this.stack_string_display = '';
 		}
 		if(this.already_simbol_in_stack(character)){
@@ -68,6 +68,6 @@ export class Calculadora {
 		}
 	}
 	public clear_result():void{
-		this.stack_string_display = '';
+		this.stack_string_display = '0';
 	}
 }
