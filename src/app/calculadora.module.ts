@@ -1,6 +1,7 @@
 import {Polaca} from './polaca.module'
+import {Simbol} from './simbolo.module'
 export class Calculadora {
-	stack_string_display: string = '';
+	private stack_string_display: string = '';
 	private static instance: Calculadora;
 	private constructor() { }
 	public static getInstance(): Calculadora {
@@ -22,8 +23,8 @@ export class Calculadora {
 		this.stack_string_display += character;
 	}
 	private already_simbol_in_stack(character: string): boolean{
-		return this.is_simbol(character[1]) && 
-			this.is_simbol(this.stack_string_display[this.stack_string_display.length -2]);
+		return Simbol.is(character[1]) && 
+			Simbol.is(this.stack_string_display[this.stack_string_display.length -2]);
 	}
 	public compute_result():void{
 		let divided_string_display = this.stack_string_display.split(" ");
@@ -62,15 +63,9 @@ export class Calculadora {
 	}
 	private find_two_numbers(expresion: string[]): number{
 		for(let i = 0; ;i++){
-			if(this.is_number(expresion[i]) && this.is_number(expresion[i+1]))
+			if(!Simbol.is(expresion[i]) && !Simbol.is(expresion[i+1]))
 			   return i;
 		}
-	}
-	private is_number(number: string): boolean{
-		return !this.is_simbol(number);
-	}
-	private is_simbol(simbol: string): boolean{
-		return simbol == '+' || simbol == '-' || simbol == '*' || simbol == '/' ;
 	}
 	public clear_result():void{
 		this.stack_string_display = '';

@@ -1,3 +1,4 @@
+import { Simbol} from './simbolo.module'
 export class Polaca{
 	static Do(expresion: string[]):string[]{
 		let stack_resultado: string[] = [];
@@ -6,7 +7,7 @@ export class Polaca{
 
 		for(let i = 0; i<expresion_length; i++){
 			let elemento = expresion.pop();
-			if(is_simbol(elemento)){
+			if(Simbol.is(elemento)){
 				while(high_presedence_in_stack(elemento, stack_operadores)){
 					stack_resultado.push(stack_operadores.pop());
 				}
@@ -21,9 +22,6 @@ export class Polaca{
 		return stack_resultado;
 	}
 
-}
-function is_simbol(simbol: string): boolean{
-	return simbol == '+' || simbol == '-' || simbol == '*' || simbol == '/' ;
 }
 function high_presedence_in_stack(elemento: string, stack: string[]): boolean{
 	return is_lower_precedence(elemento, stack[stack.length -1]);
