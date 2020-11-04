@@ -1,3 +1,4 @@
+import {Polaca} from './polaca.module'
 export class Calculadora {
 	stack_string_display: string = '';
 	private static instance: Calculadora;
@@ -26,12 +27,11 @@ export class Calculadora {
 	}
 	public compute_result():void{
 		let divided_string_display = this.stack_string_display.split(" ");
-		let prefix_string = this.convert_string_prefix(divided_string_display);
+		let prefix_string = Polaca.Do(divided_string_display);
 		this.stack_string_display = this.evualuate_math_prefix(prefix_string);
 	}
 	private evualuate_math_prefix(expresion: string[]):string{
 		while(expresion.length > 1){
-			console.log(expresion);
 			let index_two_next_numbers: number = this.find_two_numbers(expresion);
 			let operate_two_result: string = this.operate_two(expresion, index_two_next_numbers);
 			expresion.splice(index_two_next_numbers-1, 3, operate_two_result);
@@ -69,40 +69,8 @@ export class Calculadora {
 	private is_number(number: string): boolean{
 		return !this.is_simbol(number);
 	}
-	private convert_string_prefix(expresion: string[]): string[]{
-		//Notación polaca inversa
-		let stack_resultado: string[] = [];
-		let stack_operadores: string[] = [];
-		let expresion_length = expresion.length;
-
-		for(let i = 0; i<expresion_length; i++){
-			let elemento = expresion.pop();
-			if(this.is_simbol(elemento)){
-				while(this.high_presedence_in_stack(elemento, stack_operadores)){
-					stack_resultado.push(stack_operadores.pop());
-				}
-				stack_operadores.push(elemento);
-			}else
-				stack_resultado.push(elemento);
-		}
-		while(stack_operadores.length > 0){
-			stack_resultado.push(stack_operadores.pop());
-		}
-		stack_resultado = stack_resultado.reverse();
-		return stack_resultado;
-	}
-	private high_presedence_in_stack(elemento: string, stack: string[]): boolean{
-		return this.is_lower_precedence(elemento, stack[stack.length -1]);
-
-	}
 	private is_simbol(simbol: string): boolean{
 		return simbol == '+' || simbol == '-' || simbol == '*' || simbol == '/' ;
-	}
-	private is_lower_precedence( elemento: string, stack_operators: string): boolean{
-		if(elemento == '+' || elemento == '-')
-			if(stack_operators == '*' || stack_operators == '/')
-				return true;
-		return false;
 	}
 	public clear_result():void{
 		this.stack_string_display = '';
